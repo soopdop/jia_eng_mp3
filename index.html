@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>지아의 영어 문장 쏙쏙 듣기 (지아용)</title>
+  <!-- 파비콘 및 모바일 홈화면 앱 아이콘 -->
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#2563eb">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- QR 코드 스캐너 라이브러리 CDN -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    input, textarea {
+      user-select: text;
+    }
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 12px);
+    }
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 8px);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* 카메라 스캔 박스 스타일 */
+    #qrReader video {
+      border-radius: 1rem;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans h-screen max-h-screen overflow-hidden flex flex-col antialiased">
+
+  <!-- ======================================================== -->
+  <!-- 1. 초기 랜딩 화면 (초기 화면: 멋진 타이틀 + 음원 가져오기) -->
+  <!-- ======================================================== -->
+  <section id="viewLanding" class="flex-1 max-w-md w-full mx-auto p-5 flex flex-col justify-between overflow-y-auto no-scrollbar safe-top safe-bottom">
+
+    <!-- 상단 멋진 타이틀 섹션 (지아 사진 & 타이틀) -->
+    <div class="text-center pt-3 pb-2 space-y-2">
+      <!-- 지아 사진 (적절한 크기와 예쁜 라운드 프레임) -->
+      <div class="relative inline-block mb-1">
+        <img src="./jia2.png" alt="지아" class="w-36 h-28 object-cover rounded-3xl shadow-xl border-4 border-white ring-4 ring-pink-200/60 mx-auto transition-transform hover:scale-105">
+        <span class="absolute -bottom-2 -right-1 bg-gradient-to-tr from-pink-500 to-rose-400 text-white p-1.5 rounded-2xl shadow-md text-sm leading-none flex items-center justify-center">
+          🎧
+        </span>
+      </div>
+
+      <!-- 지아용 뱃지 & 타이틀 -->
+      <div>
+        <span class="inline-block px-3 py-0.5 bg-pink-100 text-pink-700 font-black text-[11px] rounded-full border border-pink-200 shadow-xs mb-1">
+          💖 지아용 💖
+        </span>
+        <h1 class="text-2xl font-black tracking-tight text-slate-900 leading-tight">
+          영어 문장 <span class="text-blue-600">쏙쏙</span> 듣기
+        </h1>
+      </div>
+
+      <p class="text-xs text-slate-500 font-medium leading-relaxed">
+        교재의 딩동 소리는 쏙 빼고,<br>듣기 편하게 문장별로 쏙쏙 나눠 들어요!
+      </p>
+    </div>
+
+    <!-- 중앙 카드: MP3 가져오기 선택 옵션 -->
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 space-y-4 my-auto">
+      <div class="text-center border-b border-slate-100 pb-3">
+        <h2 class="text-sm font-black text-slate-800">MP3 음원 가져오기</h2>
+        <p class="text-[11px] text-slate-400 mt-0.5">교재 QR코드를 찍거나 주소를 넣어주세요</p>
+      </div>
+
+      <!-- 옵션 1: QR코드로 가져오기 버튼 (큼직하고 직관적) -->
+      <button id="openQrScannerBtn" class="w-full py-4 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.98] text-white rounded-2xl shadow-md shadow-blue-500/20 font-bold text-sm flex items-center justify-center gap-2.5 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+        </svg>
+        <span>📷 QR코드로 바로 열기</span>
+      </button>
+
+      <div class="relative flex py-1 items-center">
+        <div class="flex-grow border-t border-slate-200"></div>
+        <span class="shrink-0 mx-3 text-[11px] font-bold text-slate-400">또는</span>
+        <div class="flex-grow border-t border-slate-200"></div>
+      </div>
+
+      <!-- 옵션 2: URL로 가져오기 입력창 -->
+      <div class="space-y-1.5">
+        <label class="block text-xs font-bold text-slate-700">🔗 인터넷 MP3 주소 (URL)</label>
+        <div class="flex gap-1.5">
+          <input type="url" id="landingUrlInput" placeholder="https://upfile.neungyule.com/.../audio.mp3" class="flex-1 bg-slate-50 border border-slate-200 focus:bg-white rounded-xl px-3 py-2.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+          <button id="landingLoadUrlBtn" class="bg-slate-800 hover:bg-slate-900 active:scale-95 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-xs">
+            열기
+          </button>
+        </div>
+      </div>
+
+      <!-- 옵션 3: 파일 직접 선택 & 능률 교재 테스트 해보기 버튼 -->
+      <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+        <label class="cursor-pointer text-[11px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition flex items-center gap-1">
+          <span>📁 내 기기 파일</span>
+          <input type="file" id="landingFileInput" accept="audio/*" class="hidden">
+        </label>
+
+        <!-- [요청 반영] 테스트 해보기 (능률 교재 음원) -->
+        <button id="landingTestBtn" class="text-[11px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 rounded-xl transition flex items-center gap-1 shadow-xs active:scale-95">
+          <span>🎯</span> 테스트 해보기
+        </button>
+      </div>
+    </div>
+
+    <!-- 로딩 상태 표시 (초기화면에서 다운로드 시) -->
+    <div id="landingLoading" class="hidden bg-white/95 rounded-2xl p-4 border border-blue-200 text-center shadow-lg space-y-2 my-2">
+      <div class="inline-block animate-spin rounded-full h-7 w-7 border-3 border-blue-600 border-t-transparent"></div>
+      <p id="landingLoadingText" class="text-xs font-bold text-slate-800">음원 다운로드 중...</p>
+    </div>
+
+    <footer class="text-center text-[11px] text-slate-400 py-2">
+      지아만을 위한 맞춤형 영어 듣기 플레이어 • 순수 프론트엔드 엔진
+    </footer>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- QR 코드 스캐너 모달 팝업 -->
+  <!-- ======================================================== -->
+  <div id="qrModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex flex-col items-center justify-center p-4">
+    <div class="bg-white rounded-3xl w-full max-w-sm p-5 space-y-3 shadow-2xl">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+          <span>📷</span> 교재 QR코드 스캔
+        </h3>
+        <button id="closeQrModalBtn" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs">
+          ✕
+        </button>
+      </div>
+
+      <!-- 카메라 프리뷰 뷰파인더 -->
+      <div id="qrReader" class="w-full bg-black rounded-2xl overflow-hidden min-h-[260px] flex items-center justify-center text-white text-xs">
+        카메라 준비 중...
+      </div>
+      <p class="text-center text-[11px] text-slate-500">교재 표지나 본문의 MP3 QR코드를 화면 안에 비춰주세요.</p>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. 플레이어 화면 (컴팩트 고정 상단 + 독립 스크롤 목록) -->
+  <!-- ======================================================== -->
+  <section id="viewPlayer" class="hidden flex-1 max-w-md w-full mx-auto flex flex-col h-screen max-h-screen overflow-hidden safe-top safe-bottom p-3">
+
+    <!-- 상단 컴팩트 헤더 바 (고정) -->
+    <div class="shrink-0 flex items-center justify-between pb-2">
+      <button id="backToLandingBtn" class="flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-slate-200 active:scale-95 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 transition">
+        <span>←</span>
+        <span>다른 음원</span>
+      </button>
+      <div class="text-right min-w-0 flex-1 ml-2">
+        <p id="playerFilename" class="text-xs font-bold text-slate-800 truncate">음원 재생 중</p>
+        <span id="playerDurationText" class="text-[10px] text-slate-400 font-mono">00:00</span>
+      </div>
+    </div>
+
+    <!-- 컴팩트 고정 플레이어 카드 영역 (shrink-0 으로 절대 화면 위로 안 밀림!) -->
+    <div class="shrink-0 space-y-2">
+
+      <!-- 파란색 컴팩트 메인 카드 (배속 조절 포함) -->
+      <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl p-4 shadow-md relative overflow-hidden">
+        <div class="flex justify-between items-center mb-1">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 backdrop-blur-md">
+            <span id="currentStatusDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 animate-pulse"></span>
+            <span id="playbackStatusLabel">준비 완료</span>
+          </span>
+          <span id="sentenceCounter" class="text-[11px] font-bold text-blue-100">0 / 0 문장</span>
+        </div>
+
+        <!-- 큼직한 문장 타이틀 -->
+        <div class="text-center py-1">
+          <h2 id="currentSentenceTitle" class="text-3xl font-black tracking-tight drop-shadow-xs">문장 1</h2>
+          <p id="currentSentenceTime" class="text-[11px] text-blue-200 font-mono mt-0.5">00:00 - 00:00 (0.0초)</p>
+        </div>
+
+        <!-- 미니 프로그레스 바 -->
+        <div class="w-full bg-black/25 rounded-full h-1.5 mt-2 overflow-hidden p-0.5">
+          <div id="sentenceProgressBar" class="bg-emerald-400 h-full rounded-full w-0 transition-all duration-100"></div>
+        </div>
+
+        <!-- [요청사항 반영] 파란 카드 내부로 이동한 모드 & 배속 버튼 바 -->
+        <div class="mt-3 pt-2.5 border-t border-white/15 flex items-center justify-between gap-1.5 text-xs">
+          <!-- 1문장 멈춤 토글 -->
+          <button id="toggleSingleModeBtn" class="flex-1 py-1.5 px-2 rounded-xl bg-white/30 text-white font-bold text-[11px] transition-all border border-white/20 flex items-center justify-center gap-1">
+            <span id="singleModeIcon">🛑</span>
+            <span id="singleModeText">1문장 멈춤</span>
+          </button>
+
+          <!-- 반복 재생 토글 -->
+          <button id="toggleLoopBtn" class="flex-1 py-1.5 px-2 rounded-xl bg-white/10 text-blue-100 font-bold text-[11px] transition-all border border-white/10 flex items-center justify-center gap-1">
+            <span id="loopIcon">🔁</span>
+            <span id="loopText">반복 OFF</span>
+          </button>
+
+          <!-- [요청사항 반영] 배속 선택 버튼 그룹 (파란 박스 안) -->
+          <div class="flex items-center bg-black/25 p-0.5 rounded-xl border border-white/10">
+            <button class="speed-btn px-2 py-1 text-[10px] font-bold rounded-lg transition-colors text-blue-200" data-speed="0.8">0.8x</button>
+            <button class="speed-btn px-2 py-1 text-[10px] font-bold rounded-lg transition-colors bg-white text-blue-700 shadow-xs" data-speed="1.0">1.0x</button>
+            <button class="speed-btn px-2 py-1 text-[10px] font-bold rounded-lg transition-colors text-blue-200" data-speed="1.2">1.2x</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 컴팩트 대형 터치 컨트롤러 (한 손 조작) -->
+      <div class="bg-white rounded-2xl p-2.5 shadow-xs border border-slate-200 flex items-center justify-between gap-2">
+        <!-- 이전 문장 -->
+        <button id="prevBtn" class="flex-1 h-12 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 active:scale-95 text-slate-800 rounded-xl flex items-center justify-center gap-1.5 transition-all">
+          <svg class="w-5 h-5 text-slate-700" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+          </svg>
+          <span class="text-xs font-bold text-slate-700">이전</span>
+        </button>
+
+        <!-- 재생 / 일시정지 -->
+        <button id="playPauseBtn" class="w-16 h-12 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-xl flex items-center justify-center shadow-md shadow-blue-500/25 active:scale-95 transition-all">
+          <svg id="playIcon" class="w-7 h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg id="pauseIcon" class="w-7 h-7 hidden" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+          </svg>
+        </button>
+
+        <!-- 다음 문장 -->
+        <button id="nextBtn" class="flex-1 h-12 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 active:scale-95 text-slate-800 rounded-xl flex items-center justify-center gap-1.5 transition-all">
+          <span class="text-xs font-bold text-slate-700">다음</span>
+          <svg class="w-5 h-5 text-slate-700" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- [요청사항 반영] 2개 핵심 슬라이더 바 (문장 쉼 구분 & 몇초 이하 소리/딩동 제거) -->
+      <div class="bg-white rounded-2xl p-2.5 shadow-xs border border-slate-200 space-y-2">
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <!-- 1. 문장 쉼 구분 슬라이더 -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center">
+              <span class="text-[11px] font-bold text-slate-700">⏱️ 문장 쉼 구분</span>
+              <span id="silenceDurationVal" class="text-[11px] font-bold text-blue-600">0.40초</span>
+            </div>
+            <input type="range" id="silenceDurationSlider" min="0.2" max="1.0" step="0.05" value="0.40" class="w-full accent-blue-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
+          </div>
+
+          <!-- 2. 몇초 이하 소리제거 (딩동/효과음 제거 슬라이더) -->
+          <div class="space-y-1">
+            <div class="flex justify-between items-center">
+              <span class="text-[11px] font-bold text-slate-700">🔔 딩동/소리 제거</span>
+              <span id="minDurationVal" class="text-[11px] font-bold text-indigo-600">1.2초 이하</span>
+            </div>
+            <input type="range" id="minDurationSlider" min="0.3" max="2.5" step="0.1" value="1.2" class="w-full accent-indigo-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 문장 목록 타이틀 바 (고정) -->
+    <div class="shrink-0 flex justify-between items-center px-1 pt-2 pb-1">
+      <h3 class="text-xs font-bold text-slate-800 flex items-center gap-1">
+        <span>📋</span> 문장 목록 (터치해서 바로 듣기)
+      </h3>
+      <span id="totalCountBadge" class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-bold">0개 문장</span>
+    </div>
+
+    <!-- [가장 중요한 수정] 독립 스크롤 컨테이너: 다음 문장 눌러도 상단 플레이어가 1픽셀도 안 잘림! -->
+    <div id="sentenceListContainer" class="flex-1 overflow-y-auto space-y-1.5 pr-1 no-scrollbar min-h-0">
+      <!-- 동적 생성되는 문장 카드들 -->
+    </div>
+
+  </section>
+
+  <script>
+    // 전역 상태
+    let audioContext = null;
+    let audioBuffer = null;
+    let sourceNode = null;
+    let gainNode = null;
+    let playbackRate = 1.0;
+
+    let sentences = []; // [{ id: 1, start: 0.0, end: 2.3, duration: 2.3 }]
+    let currentIndex = 0;
+    let isPlaying = false;
+    let startTimestamp = 0;
+    let animationTimer = null;
+
+    // 모드 설정
+    let singleSentenceMode = true; // 1문장 끝나면 자동 멈춤
+    let loopCurrentSentence = false; // 현재 문장 무한 반복
+    let html5QrScanner = null;
+
+    // 뷰 전환 요소
+    const viewLanding = document.getElementById('viewLanding');
+    const viewPlayer = document.getElementById('viewPlayer');
+    const backToLandingBtn = document.getElementById('backToLandingBtn');
+
+    // 랜딩 화면 요소
+    const openQrScannerBtn = document.getElementById('openQrScannerBtn');
+    const landingUrlInput = document.getElementById('landingUrlInput');
+    const landingLoadUrlBtn = document.getElementById('landingLoadUrlBtn');
+    const landingFileInput = document.getElementById('landingFileInput');
+    const landingTestBtn = document.getElementById('landingTestBtn');
+    const landingLoading = document.getElementById('landingLoading');
+    const landingLoadingText = document.getElementById('landingLoadingText');
+
+    // QR 모달
+    const qrModal = document.getElementById('qrModal');
+    const closeQrModalBtn = document.getElementById('closeQrModalBtn');
+
+    // 플레이어 화면 요소
+    const playerFilename = document.getElementById('playerFilename');
+    const playerDurationText = document.getElementById('playerDurationText');
+    const currentSentenceTitle = document.getElementById('currentSentenceTitle');
+    const currentSentenceTime = document.getElementById('currentSentenceTime');
+    const sentenceCounter = document.getElementById('sentenceCounter');
+    const playbackStatusLabel = document.getElementById('playbackStatusLabel');
+    const currentStatusDot = document.getElementById('currentStatusDot');
+    const sentenceProgressBar = document.getElementById('sentenceProgressBar');
+
+    const toggleSingleModeBtn = document.getElementById('toggleSingleModeBtn');
+    const singleModeIcon = document.getElementById('singleModeIcon');
+    const singleModeText = document.getElementById('singleModeText');
+
+    const toggleLoopBtn = document.getElementById('toggleLoopBtn');
+    const loopIcon = document.getElementById('loopIcon');
+    const loopText = document.getElementById('loopText');
+
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    const speedButtons = document.querySelectorAll('.speed-btn');
+
+    // 슬라이더 요소
+    const silenceDurationSlider = document.getElementById('silenceDurationSlider');
+    const silenceDurationVal = document.getElementById('silenceDurationVal');
+    const minDurationSlider = document.getElementById('minDurationSlider');
+    const minDurationVal = document.getElementById('minDurationVal');
+
+    const sentenceListContainer = document.getElementById('sentenceListContainer');
+    const totalCountBadge = document.getElementById('totalCountBadge');
+
+    // 능률 교재 테스트 음원 URL
+    const TEST_NEUNGYULE_URL = 'https://upfile.neungyule.com/QR/2022095/75_L1_P2_U14_D_140106.mp3';
+
+    // AudioContext 초기화
+    function getAudioContext() {
+      if (!audioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioCtx();
+        gainNode = audioContext.createGain();
+        gainNode.connect(audioContext.destination);
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      return audioContext;
+    }
+
+    function wrapCors(url) {
+      if (url.startsWith('data:') || url.startsWith('blob:') || url.includes(window.location.hostname)) {
+        return url;
+      }
+      return `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+    }
+
+    // 뷰 전환 함수
+    function showPlayerView() {
+      viewLanding.classList.add('hidden');
+      viewPlayer.classList.remove('hidden');
+    }
+
+    function showLandingView() {
+      stopAudio();
+      viewPlayer.classList.add('hidden');
+      viewLanding.classList.remove('hidden');
+    }
+
+    backToLandingBtn.addEventListener('click', showLandingView);
+
+    // 슬라이더 값 변경 시 실시간 반영 & 재분할
+    silenceDurationSlider.addEventListener('input', (e) => {
+      silenceDurationVal.textContent = `${Number(e.target.value).toFixed(2)}초`;
+      debouncedSplit();
+    });
+
+    minDurationSlider.addEventListener('input', (e) => {
+      minDurationVal.textContent = `${Number(e.target.value).toFixed(1)}초 이하`;
+      debouncedSplit();
+    });
+
+    let splitTimer = null;
+    function debouncedSplit() {
+      if (splitTimer) clearTimeout(splitTimer);
+      splitTimer = setTimeout(() => {
+        if (audioBuffer) splitAudioIntoSentences();
+      }, 150);
+    }
+
+    // 음원 로드 공통 로직
+    async function loadAudioFromUrl(url, label = "웹 음원") {
+      try {
+        setLandingLoading(true, "음원 다운로드 중...");
+        getAudioContext();
+
+        let response;
+        try {
+          response = await fetch(url);
+          if (!response.ok) throw new Error("CORS or network");
+        } catch (e) {
+          setLandingLoading(true, "CORS 우회 프록시 연결 중...");
+          response = await fetch(wrapCors(url));
+        }
+
+        if (!response.ok) throw new Error("음원을 불러올 수 없습니다. URL을 확인해주세요.");
+
+        setLandingLoading(true, "오디오 디코딩 중...");
+        const arrayBuffer = await response.arrayBuffer();
+        await processArrayBuffer(arrayBuffer, label);
+      } catch (err) {
+        alert("오디오 불러오기 실패: " + err.message);
+      } finally {
+        setLandingLoading(false);
+      }
+    }
+
+    // 로컬 파일 처리
+    landingFileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        setLandingLoading(true, "파일 읽는 중...");
+        getAudioContext();
+        const arrayBuffer = await file.arrayBuffer();
+        await processArrayBuffer(arrayBuffer, file.name);
+      } catch (err) {
+        alert("파일 열기 실패: " + err.message);
+      } finally {
+        setLandingLoading(false);
+      }
+    });
+
+    // 능률 교재 테스트 해보기 버튼
+    landingTestBtn.addEventListener('click', () => {
+      landingUrlInput.value = TEST_NEUNGYULE_URL;
+      loadAudioFromUrl(TEST_NEUNGYULE_URL, "능률 영어 교재 음원 (Unit 14)");
+    });
+
+    // URL 열기 버튼
+    landingLoadUrlBtn.addEventListener('click', () => {
+      const url = landingUrlInput.value.trim();
+      if (!url) return alert("MP3 주소를 입력해주세요.");
+      loadAudioFromUrl(url, "입력된 MP3 URL");
+    });
+
+    // 디코딩 및 플레이어 화면 전환
+    async function processArrayBuffer(arrayBuffer, filename) {
+      const ctx = getAudioContext();
+      audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+      playerFilename.textContent = filename;
+      playerDurationText.textContent = formatTime(audioBuffer.duration);
+
+      splitAudioIntoSentences();
+      showPlayerView();
+    }
+
+    function setLandingLoading(show, text = "") {
+      if (show) {
+        landingLoading.classList.remove('hidden');
+        landingLoadingText.textContent = text;
+      } else {
+        landingLoading.classList.add('hidden');
+      }
+    }
+
+    // ==========================================
+    // QR 코드 스캐너 제어
+    // ==========================================
+    openQrScannerBtn.addEventListener('click', () => {
+      qrModal.classList.remove('hidden');
+      startQrScanner();
+    });
+
+    closeQrModalBtn.addEventListener('click', stopQrScanner);
+
+    function startQrScanner() {
+      if (html5QrScanner) return;
+
+      html5QrScanner = new Html5Qrcode("qrReader");
+      const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+      html5QrScanner.start(
+        { facingMode: "environment" }, // 후면 카메라 우선
+        config,
+        (decodedText) => {
+          // QR코드 인식 성공!
+          console.log("QR 스캔 성공 URL:", decodedText);
+          stopQrScanner();
+          landingUrlInput.value = decodedText;
+          loadAudioFromUrl(decodedText, "QR코드 음원");
+        },
+        (errorMessage) => {
+          // 스캔 중 (무시)
+        }
+      ).catch(err => {
+        alert("카메라를 실행할 수 없습니다: " + err);
+        stopQrScanner();
+      });
+    }
+
+    function stopQrScanner() {
+      if (html5QrScanner) {
+        html5QrScanner.stop().then(() => {
+          html5QrScanner.clear();
+          html5QrScanner = null;
+        }).catch(err => {
+          html5QrScanner = null;
+        });
+      }
+      qrModal.classList.add('hidden');
+    }
+
+    // ========================================================
+    // 핵심 알고리즘: 스마트 VAD + 사용자 슬라이더 연동 딩동 제거
+    // ========================================================
+    function splitAudioIntoSentences() {
+      if (!audioBuffer) return;
+
+      const sampleRate = audioBuffer.sampleRate;
+      const channelData = audioBuffer.getChannelData(0);
+      const totalDuration = audioBuffer.duration;
+
+      const frameSec = 0.02; // 20ms
+      const frameSize = Math.floor(sampleRate * frameSec);
+      const totalFrames = Math.floor(channelData.length / frameSize);
+
+      const rmsList = new Float32Array(totalFrames);
+      let maxRms = 0;
+      let sumRms = 0;
+
+      for (let i = 0; i < totalFrames; i++) {
+        let sumSquares = 0;
+        const offset = i * frameSize;
+        for (let j = 0; j < frameSize; j++) {
+          const v = channelData[offset + j];
+          sumSquares += v * v;
+        }
+        const rms = Math.sqrt(sumSquares / frameSize);
+        rmsList[i] = rms;
+        if (rms > maxRms) maxRms = rms;
+        sumRms += rms;
+      }
+
+      const avgRms = sumRms / totalFrames;
+      const speechThreshold = Math.max(0.015, Math.min(avgRms * 0.45, maxRms * 0.05));
+
+      // 슬라이더에서 설정값 읽기
+      const minSilenceSec = parseFloat(silenceDurationSlider.value); // 문장 쉼 구분 (예: 0.4초)
+      const minSpeechFilterSec = parseFloat(minDurationSlider.value); // 몇초 이하 소리제거 (예: 1.2초)
+
+      const minSilenceFrames = Math.floor(minSilenceSec / frameSec);
+      const paddingSec = 0.12;
+
+      const rawSegments = [];
+      let inSpeech = false;
+      let speechStartFrame = 0;
+      let silenceCount = 0;
+
+      for (let i = 0; i < totalFrames; i++) {
+        const isSilent = rmsList[i] < speechThreshold;
+
+        if (!isSilent) {
+          if (!inSpeech) {
+            inSpeech = true;
+            speechStartFrame = i;
+          }
+          silenceCount = 0;
+        } else {
+          if (inSpeech) {
+            silenceCount++;
+            if (silenceCount >= minSilenceFrames) {
+              const speechEndFrame = i - silenceCount;
+              const durationSec = (speechEndFrame - speechStartFrame) * frameSec;
+
+              // [사용자 슬라이더 반영] 몇 초 이하의 너무 짧은 소리(딩동, 효과음, 잡음)는 문장으로 잡지 않고 제외!
+              if (durationSec >= minSpeechFilterSec * 0.5) {
+                const startSec = Math.max(0, (speechStartFrame * frameSec) - paddingSec);
+                const endSec = Math.min(totalDuration, (speechEndFrame * frameSec) + paddingSec);
+                rawSegments.push({
+                  start: Number(startSec.toFixed(2)),
+                  end: Number(endSec.toFixed(2)),
+                  duration: Number((endSec - startSec).toFixed(2))
+                });
+              }
+              inSpeech = false;
+              silenceCount = 0;
+            }
+          }
+        }
+      }
+
+      // 마지막 문장
+      if (inSpeech) {
+        const speechEndFrame = totalFrames;
+        const durationSec = (speechEndFrame - speechStartFrame) * frameSec;
+        if (durationSec >= minSpeechFilterSec * 0.5) {
+          const startSec = Math.max(0, (speechStartFrame * frameSec) - paddingSec);
+          const endSec = totalDuration;
+          rawSegments.push({
+            start: Number(startSec.toFixed(2)),
+            end: Number(endSec.toFixed(2)),
+            duration: Number((endSec - startSec).toFixed(2))
+          });
+        }
+      }
+
+      // [핵심] 인트로 딩동 제거: 첫 구간의 길이가 사용자가 정한 '소리 제거 슬라이더' 기준 이하이면 제외!
+      let finalSegments = [...rawSegments];
+      if (finalSegments.length > 1) {
+        const first = finalSegments[0];
+        // 첫 구간이 인트로 8초 이내이고, 길이가 슬라이더 기준값 이하인 경우 딩동/효과음으로 판정하여 제외
+        if (first.start < 8.0 && first.duration <= minSpeechFilterSec) {
+          console.log(`🔔 인트로 효과음(${first.duration}초 <= 기준 ${minSpeechFilterSec}초) 자동 제거:`, first);
+          finalSegments.shift();
+        }
+      }
+
+      if (finalSegments.length === 0) {
+        finalSegments.push({ start: 0, end: totalDuration, duration: totalDuration });
+      }
+
+      sentences = finalSegments.map((s, idx) => ({ id: idx + 1, ...s }));
+
+      renderSentenceList();
+      selectSentence(0, false);
+    }
+
+    // 문장 목록 렌더링
+    function renderSentenceList() {
+      sentenceListContainer.innerHTML = '';
+      totalCountBadge.textContent = `${sentences.length}개 문장`;
+
+      sentences.forEach((s, idx) => {
+        const item = document.createElement('button');
+        item.className = `w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group active:scale-[0.98] ${
+          idx === currentIndex
+            ? 'bg-blue-50 border-blue-500 shadow-xs ring-1 ring-blue-400'
+            : 'bg-white border-slate-200 hover:border-blue-300'
+        }`;
+        item.id = `sentence-item-${idx}`;
+
+        item.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
+              idx === currentIndex ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700'
+            }" id="badge-${idx}">
+              ${s.id}
+            </span>
+            <div>
+              <div class="font-bold text-slate-900 text-xs">문장 ${s.id}</div>
+              <div class="text-[10px] text-slate-400 font-mono">${formatTime(s.start)} ~ ${formatTime(s.end)} (${s.duration}초)</div>
+            </div>
+          </div>
+          <div class="p-1.5 rounded-lg text-blue-600 group-hover:bg-blue-100 transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        `;
+
+        item.addEventListener('click', () => {
+          selectSentence(idx, true);
+        });
+
+        sentenceListContainer.appendChild(item);
+      });
+    }
+
+    // ========================================================
+    // [중요 버그 수정] 문장 선택 시 상단 플레이어가 절대 안 밀리게!
+    // window.scroll을 쓰지 않고 오직 sentenceListContainer의 scrollTop만 조절
+    // ========================================================
+    function selectSentence(index, startPlaying = true) {
+      if (index < 0 || index >= sentences.length) return;
+
+      const prevEl = document.getElementById(`sentence-item-${currentIndex}`);
+      const prevBadge = document.getElementById(`badge-${currentIndex}`);
+      if (prevEl && prevBadge) {
+        prevEl.className = 'w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group active:scale-[0.98] bg-white border-slate-200 hover:border-blue-300';
+        prevBadge.className = 'w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs bg-slate-100 text-slate-700';
+      }
+
+      currentIndex = index;
+      const cur = sentences[currentIndex];
+
+      const curEl = document.getElementById(`sentence-item-${currentIndex}`);
+      const curBadge = document.getElementById(`badge-${currentIndex}`);
+      if (curEl && curBadge) {
+        curEl.className = 'w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group active:scale-[0.98] bg-blue-50 border-blue-500 shadow-xs ring-1 ring-blue-400';
+        curBadge.className = 'w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs bg-blue-600 text-white';
+
+        // [버그 수정 완료] 상단 플레이어가 잘리는 scrollIntoView 대신
+        // 목록 컨테이너 내부만 정밀 스크롤 계산!
+        scrollItemIntoContainerView(curEl);
+      }
+
+      currentSentenceTitle.textContent = `문장 ${cur.id}`;
+      currentSentenceTime.textContent = `${formatTime(cur.start)} ~ ${formatTime(cur.end)} (${cur.duration}초)`;
+      sentenceCounter.textContent = `${cur.id} / ${sentences.length} 문장`;
+      sentenceProgressBar.style.width = '0%';
+
+      stopAudio();
+
+      if (startPlaying) {
+        playSentence(cur.start, cur.end);
+      }
+    }
+
+    // 목록 컨테이너 내부 정밀 스크롤 함수
+    function scrollItemIntoContainerView(item) {
+      if (!sentenceListContainer || !item) return;
+
+      const itemTop = item.offsetTop - sentenceListContainer.offsetTop;
+      const itemBottom = itemTop + item.clientHeight;
+
+      if (itemTop < sentenceListContainer.scrollTop) {
+        // 위로 스크롤 필요
+        sentenceListContainer.scrollTo({ top: itemTop - 8, behavior: 'smooth' });
+      } else if (itemBottom > sentenceListContainer.scrollTop + sentenceListContainer.clientHeight) {
+        // 아래로 스크롤 필요
+        sentenceListContainer.scrollTo({ top: itemBottom - sentenceListContainer.clientHeight + 8, behavior: 'smooth' });
+      }
+    }
+
+    // 재생
+    function playSentence(startSec, endSec) {
+      if (!audioBuffer) return;
+      const ctx = getAudioContext();
+
+      stopAudio();
+
+      sourceNode = ctx.createBufferSource();
+      sourceNode.buffer = audioBuffer;
+      sourceNode.playbackRate.value = playbackRate;
+      sourceNode.connect(gainNode);
+
+      sourceNode.start(0, startSec, endSec - startSec);
+
+      isPlaying = true;
+      startTimestamp = ctx.currentTime;
+
+      updatePlayPauseUI(true);
+      trackPlayback(startSec, endSec);
+    }
+
+    function trackPlayback(startSec, endSec) {
+      if (animationTimer) cancelAnimationFrame(animationTimer);
+
+      const ctx = getAudioContext();
+      const sentenceDuration = endSec - startSec;
+
+      function update() {
+        if (!isPlaying) return;
+
+        const elapsed = (ctx.currentTime - startTimestamp) * playbackRate;
+        const progressPercent = Math.min(100, (elapsed / sentenceDuration) * 100);
+        sentenceProgressBar.style.width = `${progressPercent}%`;
+
+        if (elapsed >= sentenceDuration) {
+          handleSentenceEnded();
+          return;
+        }
+
+        animationTimer = requestAnimationFrame(update);
+      }
+
+      animationTimer = requestAnimationFrame(update);
+    }
+
+    function handleSentenceEnded() {
+      stopAudio();
+      sentenceProgressBar.style.width = '100%';
+
+      if (loopCurrentSentence) {
+        setTimeout(() => {
+          const cur = sentences[currentIndex];
+          playSentence(cur.start, cur.end);
+        }, 300);
+      } else if (singleSentenceMode) {
+        playbackStatusLabel.textContent = "문장 종료 (따라하기)";
+        currentStatusDot.className = "w-1.5 h-1.5 rounded-full bg-amber-400 mr-1";
+      } else {
+        if (currentIndex < sentences.length - 1) {
+          setTimeout(() => {
+            selectSentence(currentIndex + 1, true);
+          }, 350);
+        } else {
+          playbackStatusLabel.textContent = "전체 완료 🎉";
+        }
+      }
+    }
+
+    function stopAudio() {
+      if (sourceNode) {
+        try { sourceNode.stop(); } catch (e) {}
+        sourceNode.disconnect();
+        sourceNode = null;
+      }
+      if (animationTimer) {
+        cancelAnimationFrame(animationTimer);
+        animationTimer = null;
+      }
+      isPlaying = false;
+      updatePlayPauseUI(false);
+    }
+
+    function updatePlayPauseUI(playing) {
+      if (playing) {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+        playbackStatusLabel.textContent = "재생 중...";
+        currentStatusDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 animate-pulse";
+      } else {
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+        playbackStatusLabel.textContent = "일시정지";
+        currentStatusDot.className = "w-1.5 h-1.5 rounded-full bg-slate-400 mr-1";
+      }
+    }
+
+    playPauseBtn.addEventListener('click', () => {
+      if (!sentences || sentences.length === 0) return;
+      if (isPlaying) {
+        stopAudio();
+      } else {
+        const cur = sentences[currentIndex];
+        playSentence(cur.start, cur.end);
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) selectSentence(currentIndex - 1, true);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < sentences.length - 1) selectSentence(currentIndex + 1, true);
+    });
+
+    // 1문장 멈춤 토글
+    toggleSingleModeBtn.addEventListener('click', () => {
+      singleSentenceMode = !singleSentenceMode;
+      if (singleSentenceMode) loopCurrentSentence = false;
+      updateModeButtons();
+    });
+
+    // 무한 반복 토글
+    toggleLoopBtn.addEventListener('click', () => {
+      loopCurrentSentence = !loopCurrentSentence;
+      if (loopCurrentSentence) singleSentenceMode = false;
+      updateModeButtons();
+    });
+
+    function updateModeButtons() {
+      if (singleSentenceMode) {
+        singleModeIcon.textContent = "🛑";
+        singleModeText.textContent = "1문장 멈춤";
+        toggleSingleModeBtn.className = "flex-1 py-1.5 px-2 rounded-xl bg-white/30 text-white font-bold text-[11px] transition-all border border-white/20 flex items-center justify-center gap-1 shadow-xs";
+      } else {
+        singleModeIcon.textContent = "▶️";
+        singleModeText.textContent = "연속 재생";
+        toggleSingleModeBtn.className = "flex-1 py-1.5 px-2 rounded-xl bg-white/10 text-blue-100 font-bold text-[11px] transition-all border border-white/10 flex items-center justify-center gap-1";
+      }
+
+      if (loopCurrentSentence) {
+        loopIcon.textContent = "🔁";
+        loopText.textContent = "반복 ON";
+        toggleLoopBtn.className = "flex-1 py-1.5 px-2 rounded-xl bg-emerald-500/80 text-white font-bold text-[11px] transition-all border border-emerald-400 shadow-xs flex items-center justify-center gap-1";
+      } else {
+        loopIcon.textContent = "🔁";
+        loopText.textContent = "반복 OFF";
+        toggleLoopBtn.className = "flex-1 py-1.5 px-2 rounded-xl bg-white/10 text-blue-100 font-bold text-[11px] transition-all border border-white/10 flex items-center justify-center gap-1";
+      }
+    }
+
+    // [요청사항 반영] 파란 카드 내부 배속 버튼 제어
+    speedButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        playbackRate = parseFloat(btn.dataset.speed);
+        speedButtons.forEach(b => {
+          b.className = 'speed-btn px-2 py-1 text-[10px] font-bold rounded-lg transition-colors text-blue-200';
+        });
+        btn.className = 'speed-btn px-2 py-1 text-[10px] font-bold rounded-lg transition-colors bg-white text-blue-700 shadow-xs';
+
+        if (isPlaying && sourceNode) {
+          sourceNode.playbackRate.value = playbackRate;
+        }
+      });
+    });
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+  </script>
+</body>
+</html>
+
