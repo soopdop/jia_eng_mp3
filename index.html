@@ -647,16 +647,16 @@
               const speechEndFrame = i - silenceCount;
               const durationSec = (speechEndFrame - speechStartFrame) * frameSec;
 
-              // [사용자 슬라이더 반영] 몇 초 이하의 너무 짧은 소리(딩동, 효과음, 잡음)는 문장으로 잡지 않고 제외!
-              if (durationSec >= minSpeechFilterSec * 0.5) {
-                const startSec = Math.max(0, (speechStartFrame * frameSec) - paddingSec);
-                const endSec = Math.min(totalDuration, (speechEndFrame * frameSec) + paddingSec);
-                rawSegments.push({
-                  start: Number(startSec.toFixed(2)),
-                  end: Number(endSec.toFixed(2)),
-                  duration: Number((endSec - startSec).toFixed(2))
-                });
-              }
+              // 순수 발화 구간 추출
+              const startSec = Math.max(0, (speechStartFrame * frameSec) - paddingSec);
+              const endSec = Math.min(totalDuration, (speechEndFrame * frameSec) + paddingSec);
+              const dur = Number((endSec - startSec).toFixed(2));
+
+              rawSegments.push({
+                start: Number(startSec.toFixed(2)),
+                end: Number(endSec.toFixed(2)),
+                duration: dur
+              });
               inSpeech = false;
               silenceCount = 0;
             }
@@ -664,34 +664,30 @@
         }
       }
 
-      // 마지막 문장
+      // 마지막 문장 처리
       if (inSpeech) {
         const speechEndFrame = totalFrames;
-        const durationSec = (speechEndFrame - speechStartFrame) * frameSec;
-        if (durationSec >= minSpeechFilterSec * 0.5) {
-          const startSec = Math.max(0, (speechStartFrame * frameSec) - paddingSec);
-          const endSec = totalDuration;
-          rawSegments.push({
-            start: Number(startSec.toFixed(2)),
-            end: Number(endSec.toFixed(2)),
-            duration: Number((endSec - startSec).toFixed(2))
-          });
-        }
+        const startSec = Math.max(0, (speechStartFrame * frameSec) - paddingSec);
+        const endSec = totalDuration;
+        const dur = Number((endSec - startSec).toFixed(2));
+        rawSegments.push({
+          start: Number(startSec.toFixed(2)),
+          end: Number(endSec.toFixed(2)),
+          duration: dur
+        });
       }
 
-      // [핵심] 인트로 딩동 제거: 첫 구간의 길이가 사용자가 정한 '소리 제거 슬라이더' 기준 이하이면 제외!
-      let finalSegments = [...rawSegments];
-      if (finalSegments.length > 1) {
-        const first = finalSegments[0];
-        // 첫 구간이 인트로 8초 이내이고, 길이가 슬라이더 기준값 이하인 경우 딩동/효과음으로 판정하여 제외
-        if (first.start < 8.0 && first.duration <= minSpeechFilterSec) {
-          console.log(`🔔 인트로 효과음(${first.duration}초 <= 기준 ${minSpeechFilterSec}초) 자동 제거:`, first);
-          finalSegments.shift();
-        }
-      }
+      // [정확한 필터링] 사용자가 설정한 "딩동/소리 제거(minSpeechFilterSec)" 기준 이하인 모든 구간 완전히 제외!
+      // 예: 슬라이더가 1.2초면 1.2초 이하(0.98초 등)는 단 하나도 목록에 남지 않고 100% 제거됩니다.
+      let finalSegments = rawSegments.filter(s => s.duration > minSpeechFilterSec);
 
+      // 만약 슬라이더 기준이 너무 높아서 다 지워졌다면 원본에서 가장 긴 구간들로 대체
       if (finalSegments.length === 0) {
-        finalSegments.push({ start: 0, end: totalDuration, duration: totalDuration });
+        if (rawSegments.length > 0) {
+          finalSegments = rawSegments;
+        } else {
+          finalSegments.push({ start: 0, end: totalDuration, duration: totalDuration });
+        }
       }
 
       sentences = finalSegments.map((s, idx) => ({ id: idx + 1, ...s }));
