@@ -104,7 +104,7 @@
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
         </svg>
-        <span>📷 QR코드로 바로 열기</span>
+        <span>QR코드로 열기</span>
       </button>
 
       <div class="relative flex py-1 items-center">
@@ -131,7 +131,7 @@
           <input type="file" id="landingFileInput" accept="audio/*" class="hidden">
         </label>
 
-        <!-- [요청 반영] 테스트 해보기 (능률 교재 음원) -->
+        <!-- [요청 반영] 테스트 해보기 -->
         <button id="landingTestBtn" class="text-[11px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-3 py-2 rounded-xl transition flex items-center gap-1 shadow-xs active:scale-95">
           <span>🎯</span> 테스트 해보기
         </button>
@@ -377,7 +377,7 @@
     const totalCountBadge = document.getElementById('totalCountBadge');
 
     // 능률 교재 테스트 음원 URL
-    const TEST_NEUNGYULE_URL = 'https://upfile.neungyule.com/QR/2022095/75_L1_P2_U14_D_140106.mp3';
+    const TEST_NEUNGYULE_URL = '/jia_babo.mp3';
 
     // AudioContext 초기화
     function getAudioContext() {
