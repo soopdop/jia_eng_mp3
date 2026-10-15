@@ -1,0 +1,12 @@
+{
+  "name": "jia-english-player",
+  "version": "1.0.0",
+  "description": "지아의 영어 문장 쏙쏙 듣기 웹앱",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["english", "audio", "player", "sentence-splitter"],
+  "author": "soopdop",
+  "license": "MIT"
+}
